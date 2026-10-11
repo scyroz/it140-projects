@@ -1,33 +1,42 @@
-# Project One Get-Item Pseudocode
-#
-# Graded checkpoint: Module Five Project One
-# Later use: get-item and inventory design for M7 Project Two
-#
-# Review the course-provided get-item flowchart before completing this file.
-# Write pseudocode, not Python code. Use clear indentation and course-appropriate
-# keywords such as INPUT, OUTPUT, IF, ELSE, SET, ADD, or similar terms.
+START
 
-START get_item
+DECLARE room_items AS DICTIONARY = {
+    'Dungeon': 'Sword',
+    'Gallery': 'Shield',
+    'Library': 'Book',
+    'Kitchen': 'Sandwich',
+    'Bedroom': 'Armor',
+    'Cellar': 'Helmet'
+}
 
-    # TODO 1: Identify the information the get-item process needs.
-    # Consider the current room, item in that room, and player's inventory.
+DECLARE inventory AS LIST = []
+DECLARE current_room AS STRING = 'Dungeon'
 
-    # TODO 2: Prompt for and receive the player's get-item command.
+WHILE TRUE
+    IF current_room IN room_items THEN
+        DISPLAY "You see a", room_items[current_room]
+    END IF
 
-    # TODO 3: Validate whether the requested item is available in the current
-    # room. Show the decision clearly.
+    PROMPT player: "Enter your move:"
+    GET player_command
 
-    # TODO 4: Describe what happens when the item request is valid.
-    # Include the inventory update and player output.
+    SET trimmed_command = TRIM(player_command)
 
-    # TODO 5: Describe what happens when the item request is invalid.
-    # Include the output the player should receive.
+    IF STARTS_WITH(LOWERCASE(trimmed_command), "get ") THEN
+        SET target_item = SUBSTRING_AFTER(trimmed_command, "get ")
 
-    # TODO 6: Show how the process returns to or continues the larger gameplay
-    # loop after the command is handled.
+        IF current_room IN room_items AND LOWERCASE(room_items[current_room]) EQUALS LOWERCASE(target_item) THEN
+            ADD room_items[current_room] TO inventory
+            DISPLAY room_items[current_room] + " retrieved!"
+            REMOVE current_room FROM room_items
+            BREAK LOOP
+        ELSE
+            DISPLAY "Can't get " + target_item + "!"
+        END IF
+    ELSE
+        DISPLAY "Invalid Input!"
+    END IF
 
-END get_item
+END WHILE
 
-
-# References
-
+END
