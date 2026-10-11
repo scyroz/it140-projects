@@ -2,32 +2,50 @@
 #
 # Graded checkpoint: Module Five Project One
 # Later use: get-item and inventory design for M7 Project Two
-#
-# Review the course-provided get-item flowchart before completing this file.
-# Write pseudocode, not Python code. Use clear indentation and course-appropriate
-# keywords such as INPUT, OUTPUT, IF, ELSE, SET, ADD, or similar terms.
 
 START get_item
 
-    # TODO 1: Identify the information the get-item process needs.
-    # Consider the current room, item in that room, and player's inventory.
+    # TODO 1: Identify required room items and inventory
+    DECLARE room_items AS DICTIONARY = {
+        'Security Wing': 'Plasma Cutter',
+        'Armory': 'Energy Shield',
+        'Archives': 'Data Drive',
+        'Mess Hall': 'Ration Pack',
+        'Crew Quarters': 'Space Suit',
+        'Reactor Core': 'Oxygen Mask'
+    }
+    DECLARE inventory AS LIST = []
+    DECLARE current_room AS STRING = 'Security Wing'
 
-    # TODO 2: Prompt for and receive the player's get-item command.
+    # Gameplay loop for item retrieval
+    WHILE TRUE
+        IF current_room IN room_items THEN
+            OUTPUT "You see a " + room_items[current_room]
+        END IF
 
-    # TODO 3: Validate whether the requested item is available in the current
-    # room. Show the decision clearly.
+        # TODO 2: Prompt for and receive get-item command
+        INPUT player_command "Enter your move:"
+        SET trimmed_command = TRIM(player_command)
 
-    # TODO 4: Describe what happens when the item request is valid.
-    # Include the inventory update and player output.
+        IF STARTS_WITH(LOWERCASE(trimmed_command), "get ") THEN
+            SET target_item = SUBSTRING_AFTER(trimmed_command, "get ")
 
-    # TODO 5: Describe what happens when the item request is invalid.
-    # Include the output the player should receive.
+            # TODO 3: Validate item availability in current room
+            IF current_room IN room_items AND LOWERCASE(room_items[current_room]) EQUALS LOWERCASE(target_item) THEN
+                # TODO 4: Valid item retrieval and inventory update
+                ADD room_items[current_room] TO inventory
+                OUTPUT room_items[current_room] + " retrieved!"
+                REMOVE current_room FROM room_items
+                # TODO 6: Continue gameplay loop
+                BREAK LOOP
+            ELSE
+                # TODO 5: Invalid item output
+                OUTPUT "Can't get " + target_item + "!"
+            END IF
+        ELSE
+            OUTPUT "Invalid Input!"
+        END IF
 
-    # TODO 6: Show how the process returns to or continues the larger gameplay
-    # loop after the command is handled.
+    END WHILE
 
 END get_item
-
-
-# References
-
