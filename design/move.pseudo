@@ -1,25 +1,45 @@
-# Project One Move-Between-Rooms Pseudocode
-#
-# Graded checkpoint: Module Five Project One
-# Later use: conceptual support for M6; movement design for M7
-#
-# Review the course-provided movement flowchart before completing this file.
-# Write pseudocode, not Python code. Use clear indentation and course-appropriate
-# keywords such as INPUT, OUTPUT, IF, ELSE, WHILE, SET, or similar terms.
+START
 
-# TODO 1: Identify the information the movement process needs.
-# Consider the player's current room and movement command.
+DECLARE rooms AS DICTIONARY = {
+    'Great Hall': {'North': 'Dungeon', 'South': 'Bedroom', 'East': 'Kitchen', 'West': 'Library'},
+    'Dungeon': {'South': 'Great Hall', 'East': 'Gallery'},
+    'Gallery': {'West': 'Dungeon'},
+    'Library': {'East': 'Great Hall'},
+    'Kitchen': {'West': 'Great Hall', 'North': 'Dining Room'},
+    'Dining Room': {'South': 'Kitchen'},
+    'Bedroom': {'North': 'Great Hall', 'East': 'Cellar'},
+    'Cellar': {'West': 'Bedroom'}
+}
 
-# TODO 2: Prompt for and receive the player's movement command.
+DECLARE current_room AS STRING = 'Great Hall'
+DECLARE inventory AS LIST = []
 
-# TODO 3: Validate whether the requested movement is possible from the
-# current room. Show the decision clearly.
+WHILE TRUE
+    DISPLAY "You are in the", current_room
+    DISPLAY "Inventory:", inventory
 
-# TODO 4: Describe what happens when the movement command is valid.
-# Include the room update and player output.
+    PROMPT player: "Enter your move:"
+    GET player_command
 
-# TODO 5: Describe what happens when the movement command is invalid.
-# Include the output the player should receive.
+    SET command_parts = SPLIT(TRIM(player_command), " ")
 
-# TODO 6: Show how movement fits into repeated gameplay.
-# The final game continues accepting commands until a required ending occurs.
+    IF LENGTH(command_parts) != 2 THEN
+        DISPLAY "Invalid Input!"
+    ELSE
+        SET action = LOWERCASE(command_parts[0])
+        SET direction = CAPITALIZE(command_parts[1])
+
+        IF action EQUALS "go" THEN
+            IF direction IN rooms[current_room] THEN
+                SET current_room = rooms[current_room][direction]
+            ELSE
+                DISPLAY "You can't go that way!"
+            END IF
+        ELSE
+            DISPLAY "Invalid Input!"
+        END IF
+    END IF
+
+END WHILE
+
+END
